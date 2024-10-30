@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tkstar.threads"
+      "bundleIdentifier": "com.tkstar.lecture-project"
     },
     "android": {
       "adaptiveIcon": {
@@ -41,7 +41,9 @@
             "newArchEnabled": true
           }
         }
-      ]
+      ],
+      "expo-font",
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
