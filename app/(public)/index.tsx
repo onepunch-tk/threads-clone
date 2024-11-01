@@ -22,7 +22,7 @@ function Index() {
       const { createdSessionId, setActive } = await startOAuthFlow();
       console.log(
         " ~ handleFacebookLogin ~ createdSessionId: ",
-        createdSessionId
+        createdSessionId,
       );
       if (createdSessionId) {
         await setActive?.({ session: createdSessionId });
@@ -37,7 +37,7 @@ function Index() {
       const { createdSessionId, setActive } = await starGoogleOAuthFlow();
       console.log(
         " ~ handleGoogleLogin ~ createdSessionId: ",
-        createdSessionId
+        createdSessionId,
       );
       if (createdSessionId) {
         await setActive?.({ session: createdSessionId });
