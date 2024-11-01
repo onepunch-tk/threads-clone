@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useOAuth } from "@clerk/clerk-expo";
 import { Colors } from "@/constants/Colors";
 import { Ionicons } from "@expo/vector-icons";
+import { useOAuth } from "@clerk/clerk-expo";
 
 function Index() {
   const { startOAuthFlow } = useOAuth({ strategy: "oauth_facebook" });
@@ -25,7 +25,7 @@ function Index() {
         createdSessionId,
       );
       if (createdSessionId) {
-        await setActive?.({ session: createdSessionId });
+        setActive?.({ session: createdSessionId });
       }
     } catch (e) {
       console.error(e);
@@ -40,7 +40,7 @@ function Index() {
         createdSessionId,
       );
       if (createdSessionId) {
-        await setActive?.({ session: createdSessionId });
+        setActive?.({ session: createdSessionId });
       }
     } catch (e) {
       console.error(e);
@@ -63,6 +63,7 @@ function Index() {
             <View style={styles.loginButtonContent}>
               <Image
                 source={require("@/assets/images/instagram_icon.webp")}
+                resizeMode={"cover"}
                 style={styles.loginButtonIcon}
               />
               <Text style={styles.loginButtonText}>
@@ -129,7 +130,6 @@ const styles = StyleSheet.create({
   loginImage: {
     width: "100%",
     height: 350,
-    resizeMode: "cover",
   },
   title: {
     fontFamily: "DMSans_700Bold",
