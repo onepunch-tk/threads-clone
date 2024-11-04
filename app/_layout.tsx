@@ -17,8 +17,25 @@ import { tokenCache } from "@/utils/cache";
 import { LogBox } from "react-native";
 import { ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from "convex/react-clerk";
+import * as Sentry from "@sentry/react-native";
 
 SplashScreen.preventAutoHideAsync();
+
+const reactNavigationIntegration = Sentry.reactNavigationIntegration();
+
+Sentry.init({
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN!,
+  debug: false,
+  tracesSampleRate: 1.0,
+  attachScreenshot: true,
+  enableNativeFramesTracking: true,
+  _experiments: {
+    profilesSampleRate: 1.0,
+    replaysSessionSampleRate: 1.0,
+    replaysOnErrorSampleRate: 1.0,
+  },
+  integrations: [reactNavigationIntegration, Sentry.mobileReplayIntegration()],
+});
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 
@@ -63,6 +80,17 @@ function InitialLayout() {
     }
   }, [isSignedIn]);
 
+  useEffect(() => {
+    if (user && user.user) {
+      Sentry.setUser({
+        email: user.user.emailAddresses[0].emailAddress,
+        id: user.user.id,
+      });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user]);
+
   return <Slot />;
 }
 
@@ -78,4 +106,4 @@ function RootLayoutNav() {
   );
 }
 
-export default RootLayoutNav;
+export default Sentry.wrap(RootLayoutNav);
