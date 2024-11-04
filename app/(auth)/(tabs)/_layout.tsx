@@ -1,6 +1,6 @@
 import { Tabs, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { useAuth } from "@clerk/clerk-expo";
 
@@ -91,17 +91,13 @@ function Layout() {
         name="profile"
         options={{
           title: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons
               name={focused ? "person" : "person-outline"}
               color={color}
               size={size}
             />
-          ),
-          headerRight: () => (
-            <TouchableOpacity onPress={() => signOut()}>
-              <Ionicons name="log-out" size={24} />
-            </TouchableOpacity>
           ),
         }}
       />
