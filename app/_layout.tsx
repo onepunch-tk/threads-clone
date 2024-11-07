@@ -1,4 +1,9 @@
-import { Slot, useRouter, useSegments } from "expo-router";
+import {
+  Slot,
+  useNavigationContainerRef,
+  useRouter,
+  useSegments,
+} from "expo-router";
 import {
   DMSans_400Regular,
   DMSans_500Medium,
@@ -95,6 +100,12 @@ function InitialLayout() {
 }
 
 function RootLayoutNav() {
+  const ref = useNavigationContainerRef();
+  useEffect(() => {
+    if (ref) {
+      reactNavigationIntegration.registerNavigationContainer(ref);
+    }
+  }, [ref]);
   return (
     <ClerkProvider publishableKey={publishableKey!} tokenCache={tokenCache}>
       <ClerkLoaded>
