@@ -41,6 +41,9 @@ dependencies:
   expo-haptics:
     specifier: ~13.0.1
     version: 13.0.1(expo@51.0.38)
+  expo-image-picker:
+    specifier: ~15.0.7
+    version: 15.0.7(expo@51.0.38)
   expo-linking:
     specifier: ~6.3.1
     version: 6.3.1(expo@51.0.38)
@@ -5672,6 +5675,23 @@ packages:
       expo: '*'
     dependencies:
       expo: 51.0.38(@babel/core@7.26.0)(@babel/preset-env@7.26.0)
+    dev: false
+
+  /expo-image-loader@4.7.0(expo@51.0.38):
+    resolution: {integrity: sha512-cx+MxxsAMGl9AiWnQUzrkJMJH4eNOGlu7XkLGnAXSJrRoIiciGaKqzeaD326IyCTV+Z1fXvIliSgNW+DscvD8g==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 51.0.38(@babel/core@7.26.0)(@babel/preset-env@7.26.0)
+    dev: false
+
+  /expo-image-picker@15.0.7(expo@51.0.38):
+    resolution: {integrity: sha512-u8qiPZNfDb+ap6PJ8pq2iTO7JKX+ikAUQ0K0c7gXGliKLxoXgDdDmXxz9/6QdICTshJBJlBvI0MwY5NWu7A/uw==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 51.0.38(@babel/core@7.26.0)(@babel/preset-env@7.26.0)
+      expo-image-loader: 4.7.0(expo@51.0.38)
     dev: false
 
   /expo-json-utils@0.13.1:

@@ -12,6 +12,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Colors } from "@/constants/Colors";
+import * as ImagePicker from "expo-image-picker";
 
 function Page() {
   const { bioString, linkString, userId, imageUrl } = useLocalSearchParams<{
@@ -25,17 +26,52 @@ function Page() {
   const [link, setLink] = useState(linkString);
 
   const updateUser = useMutation(api.users.updateUser);
+  const generateUploadUrl = useMutation(api.users.generateUploadUrl);
   const router = useRouter();
+  const [selectedImage, setSelectedImage] =
+    useState<ImagePicker.ImagePickerAsset | null>(null);
 
   async function onDone() {
+    let storageId: Id<"_storage"> | undefined;
+    if (selectedImage) {
+      storageId = await updateProfilePicture();
+    }
+
     await updateUser({
       _id: userId as Id<"users">,
       bio,
       websiteUrl: link,
+      ...(storageId && { imageUrl: storageId }),
     });
 
     router.dismiss();
   }
+
+  async function updateProfilePicture() {
+    const uploadUrl = await generateUploadUrl();
+    const response = await fetch(selectedImage!.uri);
+    const blob = await response.blob();
+    const result = await fetch(uploadUrl, {
+      method: "POST",
+      body: blob,
+      headers: { "Content-Type": selectedImage!.mimeType! },
+    });
+    const { storageId } = await result.json();
+    console.log("storageId: ", storageId);
+    return storageId as Id<"_storage">;
+  }
+
+  async function pickImage() {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+    });
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0]);
+    }
+  }
+
   return (
     <View>
       <Stack.Screen
@@ -47,7 +83,14 @@ function Page() {
           ),
         }}
       />
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <TouchableOpacity onPress={pickImage}>
+        {selectedImage ? (
+          <Image source={{ uri: selectedImage.uri }} style={styles.image} />
+        ) : (
+          <Image source={{ uri: imageUrl }} style={styles.image} />
+        )}
+      </TouchableOpacity>
+
       <View style={styles.section}>
         <Text style={styles.label}>Bio</Text>
         <TextInput
