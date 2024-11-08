@@ -5,7 +5,7 @@ import {
   query,
   QueryCtx,
 } from "./_generated/server";
-import { Id } from "@/convex/_generated/dataModel";
+import { Doc, Id } from "@/convex/_generated/dataModel";
 
 export const createUser = internalMutation({
   args: {
@@ -32,10 +32,11 @@ export const getUserByClerkId = query({
     clerkId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const user = await ctx.db
       .query("users")
       .filter((q) => q.eq(q.field("clerkId"), args.clerkId))
       .unique();
+    return await getUserWithImageUrl(ctx, user);
   },
 });
 
@@ -44,7 +45,8 @@ export const getUserById = query({
     userId: v.id("users"),
   },
   handler: async (ctx, args) => {
-    return await getUserWithImageUrl(ctx, args.userId);
+    const user = await ctx.db.get(args.userId);
+    return await getUserWithImageUrl(ctx, user);
   },
 });
 
@@ -70,8 +72,7 @@ export const generateUploadUrl = mutation({
 });
 
 //REUSABLE FUNCTIONS
-async function getUserWithImageUrl(ctx: QueryCtx, userId: Id<"users">) {
-  const user = await ctx.db.get(userId);
+async function getUserWithImageUrl(ctx: QueryCtx, user: Doc<"users"> | null) {
   if (!user?.imageUrl || user?.imageUrl.startsWith("http")) {
     return user;
   }
